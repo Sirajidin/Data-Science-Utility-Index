@@ -1,0 +1,3 @@
+# wget
+# mount
+# export
