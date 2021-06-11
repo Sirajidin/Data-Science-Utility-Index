@@ -1,4 +1,4 @@
-def file_size(path,numeric=True,unit='Byte',language='EN',verbose=False):
+def file_size(path,numeric=True,unit='Byte',language='EN',verbose=False,decimal=2):
     import os
     file_size = os.path.getsize(path)
     #file_size = os.stat('temp/equity_price20210601/equity_price20210601.txt').st_size
@@ -42,6 +42,9 @@ def file_size(path,numeric=True,unit='Byte',language='EN',verbose=False):
     elif unit  in { 'Bit','b'}:
         _unit='b'
         file_size = file_size * 8
+    else:
+        _unit='B'
+        pass
     
     if file_size != 1 and language == 'EN':
         unit = unit + 's'
@@ -62,20 +65,25 @@ def file_size(path,numeric=True,unit='Byte',language='EN',verbose=False):
     }
     if language == 'ZH':
         unit = unit_map[language][_unit]
-
+        
+    if _unit in ('B','b'):
+            decimal = 0
+            
     if verbose:
         path = os.path.split(path)
         output = f'Relative dir: {path[0]}\n  |\n  +-- file: {path[1]}'
-        output = f'{output}\n        |\n        +-- size: {file_size} {unit}'
+        output = f'{output}\n        |\n        +-- size: {file_size:.{decimal}f} {unit}'
         if numeric:
             print(output)
     else:
         output = unit
     if numeric:
-        output = file_size
+        output = round(file_size,decimal)
     else:
         output =(file_size,output)
         
     return output
 
-file_size(path='temp/equity_price20210601/equity_price20210601.txt')
+
+if __name__ == '__main__':
+    file_size(path='meta_jupyter.ipynb',numeric=True,unit='Byte',language='EN',verbose=True,decimal=2)
