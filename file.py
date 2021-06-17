@@ -319,3 +319,11 @@ def zip_count_lines(path,file_name):
 #     zip_count_lines(path)
 #     count_lines(path)
     
+
+    
+def zip_files(dir_path):
+    import zipfile
+    with zipfile.ZipFile(f'{dir_path}.zip', 'w', zipfile.ZIP_DEFLATED) as zipobj:
+        file_paths = get_file_paths(dir_path)
+        for item in tqdm(file_paths):
+            zipobj.write(item,arcname=item.replace(dir_path,''))
