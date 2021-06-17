@@ -224,3 +224,55 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
             print(f'{Channel} returned {data}')
             
 print(f'{time.time() - time_start:.2f} seconds time to process')
+
+
+
+
+
+def original_size_of_zip(zip_path):
+    total_file_size = 0
+    import zipfile
+    with zipfile.ZipFile(zip_path, 'r') as zipobj:
+        for item in zipobj.namelist():   
+            if '.zip' in item:
+                from io import BytesIO
+                zfiledata = BytesIO(zipobj.read(item))
+                total_file_size += original_size_of_zip(zfiledata)
+            else:
+                item_info = zipobj.getinfo(item)
+                total_file_size += item_info.file_size
+                
+    return total_file_size
+
+
+
+
+
+
+from io import BytesIO
+def original_size_of_zip(zip_path,zip_path_str='D:\datayes\work\data.zip',is_full_path=False,depth=1):
+    out_strings = []
+    out_strings.append(os.path.normpath(zip_path_str))
+    total_file_size = 0
+                    
+    import zipfile
+    with zipfile.ZipFile(zip_path, 'r') as zipobj:
+        for item in zipobj.namelist():   
+            if '.zip' in item:
+                zfiledata = BytesIO(zipobj.read(item))
+                leding_space = ' ' * depth * 4
+                file_path_str = f'{leding_space}{zip_path_str}/{item}/'
+                total_file_size += original_size_of_zip(zfiledata,zip_path_str=file_path_str,depth=depth+1)
+            else:
+                
+                item_info = zipobj.getinfo(item)
+                total_file_size += item_info.file_size
+                leding_space = ' ' * (depth - 1) * 4
+                file_path_str = f'{leding_space}{zip_path_str}{item}'
+                
+                file_path_str = os.path.normpath(file_path_str)
+                out_str = f'{file_path_str}  -->  {item_info.file_size}'
+                out_strings.append(out_str)
+                
+    print('\n'.join(out_strings))
+    return total_file_size,
