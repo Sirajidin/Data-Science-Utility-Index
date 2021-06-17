@@ -158,3 +158,69 @@ def file_size(path,numeric=True,unit='Byte',language='EN',verbose=False,decimal=
 
 if __name__ == '__main__':
     file_size(path='D:\datayes\work\data.zip',numeric=True,unit='M',language='EN',verbose=True,decimal=2,is_archive=True)
+    
+    
+ 
+
+
+
+def get_file_paths(dir_path):
+    import os
+    filePaths = []
+    for root, directories, files in os.walk(dir_path):
+        for filename in files:
+            #filePath = os.path.join(os.path.split(dir_path)[1], filename)
+            filePath = os.path.join(root, filename)
+            filePaths.append(filePath)
+    return filePaths
+
+
+
+
+import zipfile
+with zipfile.ZipFile(f'{dir_path}.zip', 'w', zipfile.ZIP_DEFLATED) as zipobj:
+    file_paths = get_file_paths(dir_path)
+    for item in file_paths:
+        zipobj.write(item,arcname=os.path.split(item)[1])
+        
+
+        
+import concurrent.futures
+
+def wirte_out(Series,file_name,dir_path):
+    path = os.path.join(dir_path,file_name+'.zip')
+    try:
+        compression_opts = dict(method='zip',archive_name=f'{file_name}.csv')
+        Series.to_csv(path,index=False,compression=compression_opts)
+        #Series.to_csv(f"ttt{path}.csv",index=False)
+        return True
+    except Exception as exc:
+        print(exc)
+        return False
+    
+    
+    
+time_start = time.time()
+dir_path = 'D:\datayes\work\data'
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+    future_to_Channel ={}
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    for Channel in all_Channel:
+        future_to_Channel[executor.submit(
+            wirte_out,
+            all_Channel[Channel],
+            Channel,
+            dir_path)] = Channel
+        
+    for future in concurrent.futures.as_completed(future_to_Channel):
+        Channel = future_to_Channel[future]
+        try:
+            data = future.result()
+        except Exception as exc:
+            print(f'{Channel} generated an exception: {exc}') 
+        else:
+            print(f'{Channel} returned {data}')
+            
+print(f'{time.time() - time_start:.2f} seconds time to process')
