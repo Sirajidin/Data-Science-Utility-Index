@@ -1,32 +1,50 @@
-def normalize_unit_name(unit):
-    if unit in {'Byte','B'}:
-        unit='B'
-        pass
-    elif unit  in {'Kilobyte','KB','K'}:
-        unit='K'
-    elif unit  in { 'Megabyte','MB','M'}:
-        unit='M'
-    elif unit in {'Gigabyte','GB','G'}:
-        unit='G'
-    elif unit  in { 'Terabyte','TB','T'}:
-        unit='T'
-    elif unit  in {'Petabyte','PB','P'}:
-        unit='p'
-    elif unit  in { 'Exabyte','EB'}:
-        unit='EB'
-    elif unit  in { 'Zettabyte','ZB'}:
-        unit='ZB'
-    elif unit  in { 'Yottabyte','YB'}:
-        unit='YB'
-    elif unit  in { 'Bit','b'}:
-        unit='b'
+def normalize_unit_name(unit, language='EN'):
+    unit_lower = unit.lower()
+    unit_map = {
+        'ZH':{
+            'b':'比特',
+            'B':'字节',
+            'k':'千字节',
+            'M':'兆',
+            'G':'千兆',
+            'T':'太',
+            'P':'拍',
+            'EB':'艾',
+            'ZB':'泽',
+            'YB':'尧'
+        }
+    }
+
+    
+    if unit_lower in {'Byte'.lower(),'B'.lower()}:
+        return 'B'
+    elif unit_lower  in {'Kilobyte'.lower(), 'KB'.lower(), 'K'.lower()}:
+        return 'K'
+    elif unit_lower  in {'Megabyte'.lower(), 'MB'.lower(), 'M'.lower()}:
+        return 'M'
+    elif unit_lower in {'Gigabyte'.lower(), 'GB'.lower(), 'G'.lower()}:
+        return 'G'
+    elif unit_lower  in {'Terabyte'.lower(), 'TB'.lower(), 'T'.lower()}:
+        return 'T'
+    elif unit_lower  in {'Petabyte'.lower(), 'PB'.lower(), 'P'.lower()}:
+        return 'p'
+    elif unit_lower  in {'Exabyte'.lower(), 'EB'.lower()}:
+        return 'EB'
+    elif unit_lower  in {'Zettabyte'.lower(), 'ZB'.lower()}:
+        return 'ZB'
+    elif unit_lower  in {'Yottabyte'.lower(), 'YB'.lower()}:
+        return 'YB'
+    elif unit  in {'Bit','b','bit'}:
+        return 'b'
     else:
-        unit='B'
-    return unit
+        raise ValueError(unit)
+    
+    if language == 'ZH':
+        unit = unit_map[language][_unit]
   
   
   
-  def file_size_converter(value,original_unit,target_unit):
+def file_size_converter(value, original_unit, target_unit, decimal=None):
     import pandas as pd
     unit_table = pd.DataFrame(
                 #     'B'           'K',              'M'               'G'                'T'              'P'                'EB'              'ZB'             'YB'              'b'
@@ -60,6 +78,13 @@ def normalize_unit_name(unit):
     target_unit = normalize_unit_name(target_unit)
     
     factor = unit_table.loc[original_unit,target_unit]
+    value = value * factor
     
-    print(value)
-    return value * factor
+
+    if target_unit in ('B','b'):
+        decimal = 0
+        
+    if decimal:
+        value = round(value,decimal)
+    
+    return value
