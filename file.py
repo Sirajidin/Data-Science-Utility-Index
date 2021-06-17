@@ -59,33 +59,33 @@ def normalize_unit_name(unit='b', language=None):
     _unit = unit
     
     if unit_lower in unit_names_lower['B']  and unit!='b':
-        _unit = 'B'
+        unit_abbrv = 'B'
     elif unit_lower in unit_names_lower['K']:
-        _unit = 'K'
+        unit_abbrv = 'K'
     elif unit_lower in unit_names_lower['M']:
-        _unit = 'M'
+        unit_abbrv = 'M'
     elif unit_lower in unit_names_lower['G']:
-        _unit = 'G'
+        unit_abbrv = 'G'
     elif unit_lower in unit_names_lower['T']:
-        _unit = 'T'
+        unit_abbrv = 'T'
     elif unit_lower in unit_names_lower['P']:
-        _unit = 'p'
+        unit_abbrv = 'p'
     elif unit_lower in unit_names_lower['EB']:
-        _unit = 'EB'
+        unit_abbrv = 'EB'
     elif unit_lower in unit_names_lower['ZB']:
-        _unit = 'ZB'
+        unit_abbrv = 'ZB'
     elif unit_lower in unit_names_lower['YB']:
-        _unit = 'YB'
+        unit_abbrv = 'YB'
     elif unit_lower in unit_names_lower['bit']:
-        _unit = 'bit'
+        unit_abbrv = 'bit'
     else:
         raise ValueError(unit,unit_names)
     
     if language:
         unit = unit_language[language][_unit]
-        return _unit,unit
+        return unit_abbrv,unit
     
-    return _unit
+    return unit_abbrv
   
   
   
