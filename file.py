@@ -1,4 +1,4 @@
-def normalize_unit_name(unit='b', language='EN'):
+def normalize_unit_name(unit='b', language=None):
     
     unit_language = {
         'ZH':{
@@ -12,6 +12,18 @@ def normalize_unit_name(unit='b', language='EN'):
             'EB': '艾',
             'ZB': '泽',
             'YB': '尧'
+        },
+        'EN':{
+            'bit': 'bit',
+            'B': 'Byte',
+            'k': 'Kilobyte',
+            'M': 'Megabyte',
+            'G': 'Gigabyte',
+            'T': 'Terabyte',
+            'P': 'Petabyte',
+            'EB': 'Exabyte',
+            'ZB': 'Zettabyte',
+            'YB': 'Yottabyte'
         }
     }
     
@@ -43,31 +55,37 @@ def normalize_unit_name(unit='b', language='EN'):
     
     unit_lower = unit.lower()
     
+
+    _unit = unit
+    
     if unit_lower in unit_names_lower['B']  and unit!='b':
-        return 'B'
+        _unit = 'B'
     elif unit_lower in unit_names_lower['K']:
-        return 'K'
+        _unit = 'K'
     elif unit_lower in unit_names_lower['M']:
-        return 'M'
+        _unit = 'M'
     elif unit_lower in unit_names_lower['G']:
-        return 'G'
+        _unit = 'G'
     elif unit_lower in unit_names_lower['T']:
-        return 'T'
+        _unit = 'T'
     elif unit_lower in unit_names_lower['P']:
-        return 'p'
+        _unit = 'p'
     elif unit_lower in unit_names_lower['EB']:
-        return 'EB'
+        _unit = 'EB'
     elif unit_lower in unit_names_lower['ZB']:
-        return 'ZB'
+        _unit = 'ZB'
     elif unit_lower in unit_names_lower['YB']:
-        return 'YB'
+        _unit = 'YB'
     elif unit_lower in unit_names_lower['bit']:
-        return 'bit'
+        _unit = 'bit'
     else:
         raise ValueError(unit,unit_names)
     
-    if language == 'ZH':
+    if language:
         unit = unit_language[language][_unit]
+        return _unit,unit
+    
+    return _unit
   
   
   
