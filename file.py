@@ -1,46 +1,73 @@
-def normalize_unit_name(unit, language='EN'):
-    unit_lower = unit.lower()
-    unit_map = {
+def normalize_unit_name(unit='b', language='EN'):
+    
+    unit_language = {
         'ZH':{
-            'b':'比特',
-            'B':'字节',
-            'k':'千字节',
-            'M':'兆',
-            'G':'千兆',
-            'T':'太',
-            'P':'拍',
-            'EB':'艾',
-            'ZB':'泽',
-            'YB':'尧'
+            'bit': '比特',
+            'B': '字节',
+            'k': '千字节',
+            'M': '兆',
+            'G': '千兆',
+            'T': '太',
+            'P': '拍',
+            'EB': '艾',
+            'ZB': '泽',
+            'YB': '尧'
         }
     }
-
     
-    if unit_lower in {'Byte'.lower(),'B'.lower()}:
+    unit_names = {
+        'bit': ['bit', 'b'],
+        'B': ['Byte', 'B'],
+        'K': ['Kilobyte', 'KB', 'K'],
+        'M': ['Megabyte', 'MB', 'M'],
+        'G': ['Gigabyte', 'GB', 'G'],
+        'T': ['Terabyte', 'TB', 'T'],
+        'P': ['Petabyte', 'PB', 'P'],
+        'EB': ['Exabyte', 'EB'],
+        'ZB': ['Zettabyte', 'ZB'],
+        'YB': ['Yottabyte', 'YB'],
+    }
+    
+    unit_names_lower = {
+        'bit': {'b', 'bit'},
+         'B': {'b', 'byte'},
+         'K': {'k', 'kb', 'kilobyte'},
+         'M': {'m', 'mb', 'megabyte'},
+         'G': {'g', 'gb', 'gigabyte'},
+         'T': {'t', 'tb', 'terabyte'},
+         'P': {'p', 'pb', 'petabyte'},
+         'EB': {'eb', 'exabyte'},
+         'ZB': {'zb', 'zettabyte'},
+         'YB': {'yb', 'yottabyte'}
+    }
+    
+    unit_lower = unit.lower()
+    
+    if unit_lower in unit_names_lower['B']  and unit!='b':
         return 'B'
-    elif unit_lower  in {'Kilobyte'.lower(), 'KB'.lower(), 'K'.lower()}:
+    elif unit_lower in unit_names_lower['K']:
         return 'K'
-    elif unit_lower  in {'Megabyte'.lower(), 'MB'.lower(), 'M'.lower()}:
+    elif unit_lower in unit_names_lower['M']:
         return 'M'
-    elif unit_lower in {'Gigabyte'.lower(), 'GB'.lower(), 'G'.lower()}:
+    elif unit_lower in unit_names_lower['G']:
         return 'G'
-    elif unit_lower  in {'Terabyte'.lower(), 'TB'.lower(), 'T'.lower()}:
+    elif unit_lower in unit_names_lower['T']:
         return 'T'
-    elif unit_lower  in {'Petabyte'.lower(), 'PB'.lower(), 'P'.lower()}:
+    elif unit_lower in unit_names_lower['P']:
         return 'p'
-    elif unit_lower  in {'Exabyte'.lower(), 'EB'.lower()}:
+    elif unit_lower in unit_names_lower['EB']:
         return 'EB'
-    elif unit_lower  in {'Zettabyte'.lower(), 'ZB'.lower()}:
+    elif unit_lower in unit_names_lower['ZB']:
         return 'ZB'
-    elif unit_lower  in {'Yottabyte'.lower(), 'YB'.lower()}:
+    elif unit_lower in unit_names_lower['YB']:
         return 'YB'
-    elif unit  in {'Bit','b','bit'}:
-        return 'b'
+    elif unit_lower in unit_names_lower['bit']:
+        return 'bit'
     else:
-        raise ValueError(unit)
+        raise ValueError(unit,unit_names)
     
     if language == 'ZH':
-        unit = unit_map[language][_unit]
+        unit = unit_language[language][_unit]
   
   
   
