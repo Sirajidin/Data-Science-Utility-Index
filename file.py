@@ -145,67 +145,40 @@ def file_size(path,numeric=True,unit='Byte',language='EN',verbose=False,decimal=
             file_size = original_size_of_zip(path) 
     else:
         file_size = os.path.getsize(path)
-    #file_size = os.stat('temp/equity_price20210601/equity_price20210601.txt').st_size
-    
-    
-    #file = open('temp/equity_price20210601/equity_price20210601.txt')
-    #file.seek(0, os.SEEK_END)
-    #file.tell()
-    
-    # from pathlib import Path
-    # Path(r'temp/equity_price20210601/equity_price20210601.txt').stat()
-    # file=Path(r'temp/equity_price20210601/equity_price20210601.txt').stat().st_size
+        #file_size = os.stat('temp/equity_price20210601/equity_price20210601.txt').st_size
+
+
+        #file = open('temp/equity_price20210601/equity_price20210601.txt')
+        #file.seek(0, os.SEEK_END)
+        #file.tell()
+
+        # from pathlib import Path
+        # Path(r'temp/equity_price20210601/equity_price20210601.txt').stat()
+        # file=Path(r'temp/equity_price20210601/equity_price20210601.txt').stat().st_size
     
     file_size = file_size_converter(value=file_size,original_unit='Byte',target_unit=unit)
-    _unit = normalize_unit_name(unit)
-    
+    unit_abbrv,unit_en = normalize_unit_name(unit,language='EN')
     
     if file_size != 1 and language == 'EN':
-        unit = unit + 's'
-        
-    unit_map = {
-        'ZH':{
-            'b':'比特',
-            'B':'字节',
-            'k':'千字节',
-            'M':'兆',
-            'G':'千兆',
-            'T':'太',
-            'P':'拍',
-            'EB':'艾',
-            'ZB':'泽',
-            'YB':'尧'
-        }
-    }
-    if language == 'ZH':
-        unit = unit_map[language][_unit]
-        
-    if _unit in ('B','b'):
-        decimal = 0
+        unit_en = unit_en + 's'
             
     if verbose:
         path = os.path.split(path)
         output = f'Relative dir: {path[0]}\n  |\n  +-- file: {path[1]}'
-        print(decimal)
-        output = f'{output}\n        |\n        +-- size: {file_size:.{decimal}f} {unit}'
+        output = f'{output}\n        |\n        +-- size: {file_size:.{decimal}f} {unit_en}'
         if numeric:
             print(output)
     else:
-        output = unit
-    if numeric:
+        output = unit_abbrv
         
+    if numeric:
         output = round(file_size,decimal)
     else:
         output =(file_size,output)
         
     return output
 
-
-if __name__ == '__main__':
-    file_size(path='D:\datayes\work\data.zip',numeric=True,unit='M',language='EN',verbose=True,decimal=2,is_archive=True)
     
-    
- 
 
 
 
