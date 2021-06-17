@@ -276,3 +276,28 @@ def original_size_of_zip(zip_path,zip_path_str='D:\datayes\work\data.zip',is_ful
                 
     print('\n'.join(out_strings))
     return total_file_size,
+
+
+
+
+def count_lines(path):
+    with open(path,encoding='utf-8') as f:
+        n=0
+        for line in f:
+            n+=1
+    return n
+
+
+def zip_count_lines(path,file_name):
+    import zipfile
+    with zipfile.ZipFile(path) as z:
+        with z.open(file_name) as f:
+            n=0
+            for line in f:
+                n+=1
+    return n
+
+# if __name__ == '__main__':
+#     zip_count_lines(path)
+#     count_lines(path)
+    
