@@ -1,3 +1,15 @@
+nrows = 3
+import zipfile
+with zipfile.ZipFile('Z:\\L2_data\\MDL\\20210621\\20210621_mdl_6_33_0.csv.zip') as zpobjct:
+    with zpobjct.open('mdl_6_33_0.csv','r') as f:
+        header = next(f).decode().strip().split(',')
+        rows = []
+        for i in range(nrows):
+            row = next(f).decode().strip().split(',')
+            row = dict(zip(header,row))
+            rows.append(row)
+pd.DataFrame(rows)
+
 def normalize_unit_name(unit='b', language=None):
     
     unit_language = {
