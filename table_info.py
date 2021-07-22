@@ -1,29 +1,43 @@
+# from typing import
+
+import pandas as pd
+
+
 def table_meta(
-    database = 'db',
-    table_name = '',
-    driver='pyodbc',
-    dialect='mssql',
-    dbcondict={
-        'username':'',
-        'password':'',
-        'host':'',
-        'port':'',   
-    }
-):
+        database: str = 'db',
+        table_name: str = '',
+        driver: str = 'pyodbc',
+        dialect: str = 'mssql',
+        dbcondict: dict = {
+            'username': 'dd',
+            'password': 'dd',
+            'host': 'dd',
+            'port': '',
+        }
+) -> pd.DataFrame:
+    """
+    sel serve table info
+    :param database:
+    :param table_name:
+    :param driver:
+    :param dialect:
+    :param dbcondict:
+    :return:
+    """
     from sqlalchemy import create_engine
     if dbcondict['port']:
         dbcondict['port'] = ':' + dbcondict['port']
-    
-    #dialect+driver://username:password@host:port/database
+
+    # dialect+driver://username:password@host:port/database
     dbconstr = f"{dialect}+{driver}://{dbcondict['username']}:{dbcondict['password']}@{dbcondict['host']}{dbcondict['port']}/{database}"
-        
+
     if driver == 'pyodbc':
         engine = create_engine(f'{dbconstr}?driver=ODBC Driver 17 for SQL Server')
-    elif driver=='pymssql':
+    elif driver == 'pymssql':
         engine = create_engine(f'{dbconstr}?charset=utf8')
-        
+
     import pandas as pd
-    
+
     df = pd.read_sql(f'''
         select tbl_clmns.TABLE_NAME,
                al_clmns.column_id,
@@ -87,8 +101,8 @@ def table_meta(
         where al_clmns.object_id = (select OBJECT_ID('{database}..{table_name}') objct_id)
 
 
-        ''',con=engine)
-    
-    if driver=='pymssql':
-        df.loc[:,'MS_Description'] = df.apply(lambda x:x['MS_Description'].decode(), axis=1)
+        ''', con=engine)
+
+    if driver == 'pymssql':
+        df.loc[:, 'MS_Description'] = df.apply(lambda x: x['MS_Description'].decode(), axis=1)
     return df
